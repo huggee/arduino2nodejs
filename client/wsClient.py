@@ -6,8 +6,9 @@ import serial
 import serial.tools.list_ports
 import pdb
 
-# my_serial = []
 
+# url = 'ws://localhost:3000/'
+url = 'ws://wsserver2arduino-demo.azurewebsites.net/'
 
 def on_message(ws, message):
     print(message)
@@ -69,7 +70,7 @@ if __name__ == '__main__':
     my_serial[1].write('L')
 
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://localhost:3000/",
+    ws = websocket.WebSocketApp(url,
                                 on_message=on_message,
                                 on_error=on_error,
                                 on_open=on_open,

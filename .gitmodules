@@ -1,0 +1,6 @@
+[submodule "wsServer"]
+	path = wsServer
+	url = git@github.com:huggee/wsServer.git
+[submodule "socketioServer"]
+	path = socketioServer
+	url = git@github.com:huggee/socketioServer.git
