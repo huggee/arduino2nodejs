@@ -5,11 +5,12 @@ import sys
 import serial
 import serial.tools.list_ports
 import pdb
-
+from time import sleep
 
 # url = 'ws://localhost:3000/'
 url = 'ws://wsserver2arduino-demo.azurewebsites.net/'
 
+##### recieve message #####
 def on_message(ws, message):
     print(message)
     if message == 'state1':
@@ -36,20 +37,23 @@ def on_message(ws, message):
         my_serial[1].write('\n')
         # for i in range(20):
 
+##### recieve error #####
 def on_error(ws, error):
     print(error)
 
+##### connection closed #####
 def on_close(ws):
     print("#################")
     print("###  See You  ###") 
     print("#################")
 
+##### connection opened #####
 def on_open(ws):
     print("#################")
     print("###   Hello   ###")
     print("#################")
 
-    # #### connection test
+    # #### connection test ####
     # def run(*args):
     #     for i in range(3):
     #         ws.send("Hello %d" % i)
@@ -59,6 +63,7 @@ def on_open(ws):
     # thread.start_new_thread(run, ())
 
 if __name__ == '__main__':
+    ##### detect arduino #####
     my_serial = []
 
     for d in serial.tools.list_ports.comports():
@@ -66,9 +71,16 @@ if __name__ == '__main__':
         if dtype and 'Arduino' in dtype:
             my_serial.append(serial.Serial(port=d[0], baudrate=115200))
 
+    ##### test arduino connection #####
     my_serial[0].write('L')
     my_serial[1].write('L')
 
+    sleep(1)
+
+    my_serial[0].write('\n')
+    my_serial[1].write('\n')
+
+    ##### open connection to server #####
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(url,
                                 on_message=on_message,
@@ -76,3 +88,4 @@ if __name__ == '__main__':
                                 on_open=on_open,
                                 on_close=on_close)
     ws.run_forever()
+
